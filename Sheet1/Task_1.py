@@ -59,41 +59,41 @@ if __name__ == "__main__":
     N = 10000
     max_num_bretzels_produced = 24
     profit_list = []
-    # for num_bretzels_produced in range(1, max_num_bretzels_produced + 1):
-    #     total_profit = 0    
-    #     for i in range(N):
-    #         total_profit += one_day_simulation(num_bretzels_produced)
-    #     list.append(total_profit / N)
+    for num_bretzels_produced in range(1, max_num_bretzels_produced + 1):
+        total_profit = 0    
+        for i in range(N):
+            total_profit += one_day_simulation(num_bretzels_produced)
+        profit_list.append(total_profit / N)
 
-    # print(f"Optimal scenario: Producing {np.argmax(list) + 1} bretzels with an average profit of {max(list):.2f} euros.")
+    print(f"Optimal scenario: Producing {np.argmax(profit_list) + 1} bretzels with an average profit of {max(profit_list):.2f} euros.")
 
-    # plt.plot(range(1, max_num_bretzels_produced + 1), list)
-    # plt.xlabel("Number of bretzels produced")
-    # plt.ylabel("Average Profit")
-    # plt.title("Average Profit vs Number of Bretzels Produced")
+    plt.plot(range(1, max_num_bretzels_produced + 1), profit_list)
+    plt.xlabel("Number of bretzels produced")
+    plt.ylabel("Average Profit")
+    plt.title("Average Profit vs Number of Bretzels Produced")
+    plt.grid()
+    plt.show()
+
+    # # PDF calculation
+    # pdf_values = []
+    # for k in range(0, max_num_bretzels_produced + 1):
+    #     pdf_k = pdf_bretzels_per_day(k, 1/9, 1/27, 4/81)
+    #     pdf_values.append(pdf_k)
+    
+    # print(np.sum(pdf_values))  # should be 1
+    # plt.bar(range(0, max_num_bretzels_produced + 1), pdf_values)
+    # plt.xlabel("Number of Bretzels Sold")
+    # plt.ylabel("Probability")
+    # plt.title("PDF of Bretzels Sold per Day")
     # plt.grid()
     # plt.show()
 
-    # PDF calculation
-    pdf_values = []
-    for k in range(0, max_num_bretzels_produced + 1):
-        pdf_k = pdf_bretzels_per_day(k, 1/9, 1/27, 4/81)
-        pdf_values.append(pdf_k)
-    
-    print(np.sum(pdf_values))  # should be 1
-    plt.bar(range(0, max_num_bretzels_produced + 1), pdf_values)
-    plt.xlabel("Number of Bretzels Sold")
-    plt.ylabel("Probability")
-    plt.title("PDF of Bretzels Sold per Day")
-    plt.grid()
-    plt.show()
-
-    cdf_values = compute_cdf(pdf_values)
-    plt.plot(range(0, max_num_bretzels_produced + 1),
-                cdf_values, marker='o')
-    plt.xlabel("Number of Bretzels Sold")
-    plt.ylabel("Cumulative Probability")
-    plt.title("CDF of Bretzels Sold per Day")
-    plt.grid()
-    plt.show()
+    # cdf_values = compute_cdf(pdf_values)
+    # plt.plot(range(0, max_num_bretzels_produced + 1),
+    #             cdf_values, marker='o')
+    # plt.xlabel("Number of Bretzels Sold")
+    # plt.ylabel("Cumulative Probability")
+    # plt.title("CDF of Bretzels Sold per Day")
+    # plt.grid()
+    # plt.show()
 
