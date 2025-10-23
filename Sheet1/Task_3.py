@@ -2,15 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def middle_square_method(seed):
-    """
-    Middle Square Method to produce pseudo-random numbers.
-    
-    Parameters:
-    seed (int): Initial seed value (should be a 4-digit number).
-    
-    Returns:
-    int: Next pseudo-random number.
-    """
     squared = str(seed ** 2).zfill(8)  # Square the seed and pad with zeros
     middle_digits = squared[2:6]  # Extract the middle four digits
     return int(middle_digits)

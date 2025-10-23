@@ -2,18 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def lcg_random(x0, a, c, m):
-    """
-    Linear Congruential Generator (LCG) to produce pseudo-random numbers.
-    
-    Parameters:
-    seed (int): Initial seed value.
-    a (int): Multiplier.
-    c (int): Increment.
-    m (int): Modulus.
-    
-    Returns:
-    int: Next pseudo-random number.
-    """
     return (a * x0 + c) % m
 
 if __name__ == "__main__":
