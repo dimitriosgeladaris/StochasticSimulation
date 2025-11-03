@@ -6,6 +6,7 @@ def is_in_ellipsoid(a, b, c, r, point):
     x, y, z = point
     return (x**2) * a + (y**2) * b + (z**2) * c < r
 
+
 def acception_rejection(a, b, c, r, number_of_sample_points):
     accepted_points = []
     x_sample_points = np.random.uniform(- np.sqrt(r/a), np.sqrt(r/a), number_of_sample_points)
@@ -17,7 +18,6 @@ def acception_rejection(a, b, c, r, number_of_sample_points):
             accepted_points.append(point)
     probability = len(accepted_points) / number_of_sample_points
     return accepted_points, probability
-
 
 
 if __name__ == "__main__":
