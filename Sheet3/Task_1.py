@@ -9,14 +9,19 @@ def is_in_ellipsoid(a, b, c, r, point):
 
 def acception_rejection(a, b, c, r, number_of_sample_points):
     accepted_points = []
-    x_sample_points = np.random.uniform(- np.sqrt(r/a), np.sqrt(r/a), number_of_sample_points)
-    y_sample_points = np.random.uniform(- np.sqrt(r/b), np.sqrt(r/b), number_of_sample_points)
-    z_sample_points = np.random.uniform(- np.sqrt(r/c), np.sqrt(r/c), number_of_sample_points)
-    sample_points = np.array(list(zip(x_sample_points, y_sample_points, z_sample_points)))
-    for point in sample_points:
-        if is_in_ellipsoid(a, b, c, r, point):
-            accepted_points.append(point)
-    probability = len(accepted_points) / number_of_sample_points
+    rejected_points_count = 0
+    while len(accepted_points) < number_of_sample_points:
+        x_new = np.random.uniform(- np.sqrt(r/a), np.sqrt(r/a))
+        y_new = np.random.uniform(- np.sqrt(r/b), np.sqrt(r/b))
+        z_new = np.random.uniform(- np.sqrt(r/c), np.sqrt(r/c))
+        new_point = (x_new, y_new, z_new)
+        if is_in_ellipsoid(a, b, c, r, new_point):
+            accepted_points.append(new_point)
+        else:
+            rejected_points_count += 1
+    print(f"Number of accepted points: {len(accepted_points)}")
+    print(f"Number of rejected points: {rejected_points_count}")
+    probability = number_of_sample_points / (number_of_sample_points + rejected_points_count)
     return accepted_points, probability
 
 
