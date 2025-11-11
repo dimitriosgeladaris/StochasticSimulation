@@ -2,12 +2,14 @@ import numpy as np
 import scipy.special as scipy
 import matplotlib.pyplot as plt
 
+
 def binomial_distribution(n, p, k):
     """
     Calculate the probability of getting exactly k successes in n independent Bernoulli trials
     with success probability p using the binomial distribution formula.
     """
     return scipy.comb(n, k) * (p ** k) * ((1 - p) ** (n - k))
+
 
 def inverse_transform_binomial(n, p, u):
     """
@@ -21,6 +23,7 @@ def inverse_transform_binomial(n, p, u):
             return k
     return n  # In case u is very close to 1
 
+
 def recursion_binomial_distribution(n, p, k):
     if k == 0:
         return (1 - p) ** n
@@ -28,7 +31,8 @@ def recursion_binomial_distribution(n, p, k):
         return p ** n
     else:
         return (n - k + 1) * p / (k * (1 - p)) * recursion_binomial_distribution(n, p, k - 1)
-    
+
+
 def recursion_inverse_transform_binomial(n, p, u):
     k = 0
     p0 = (1 - p) ** n
@@ -40,12 +44,14 @@ def recursion_inverse_transform_binomial(n, p, u):
         p0 = pk
     return k
 
+
 def negative_binomial_distribution(r, p, k):
     """
     Calculate the probability of getting k failures before r successes in a sequence of independent Bernoulli trials
     with success probability p using the negative binomial distribution formula.
     """
     return scipy.comb(k + r - 1, r - 1) * (p ** r) * ((1 - p) ** k)
+
 
 def inverse_transform_negative_binomial(r, p, u):
     """
@@ -61,12 +67,14 @@ def inverse_transform_negative_binomial(r, p, u):
         k += 1
     return n
 
+
 def recursion_negative_binomial_distribution(r, p, k):
     if k == 0:
         return p ** r
     else:
         return (k + r - 1) / k * (1 - p) * recursion_negative_binomial_distribution(r, p, k - 1)
-    
+
+
 def recursion_inverse_transform_negative_binomial(r, p, u):
     k = 0
     p0 = p ** r
@@ -79,14 +87,13 @@ def recursion_inverse_transform_negative_binomial(r, p, u):
     return k
 
 
-
 if __name__ == "__main__":
 
     sample_size = 10000
     n = 100
     p = 0.6
 
-    ## Generate binomial random samples using inverse transform sampling
+    #  Generate binomial random samples using inverse transform sampling
     uniform_random_samples = np.random.uniform(0, 1, sample_size)
     binomial_random_samples = [inverse_transform_binomial(n, p, u) for u in uniform_random_samples]
     plt.hist(binomial_random_samples, bins=range(n + 2), density=True, alpha=0.7, color='blue', edgecolor='black')
