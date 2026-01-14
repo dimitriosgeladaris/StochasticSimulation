@@ -31,14 +31,18 @@ def importance_sampling(num_samples=10000, task=2):
 
     # Variance
     variance = np.var(weights) / num_samples
-    return theta_estimate, variance
+
+    # Running mean
+    running_mean = np.cumsum(weights) / np.arange(1, num_samples + 1)
+    return theta_estimate, variance, running_mean
 
 def classical_monte_carlo(num_samples=10000):
     x_samples = np.random.uniform(0, 1, num_samples)
     g_values = g(x_samples)
     theta_estimate = np.mean(g_values)
     variance = np.var(g_values) / num_samples
-    return theta_estimate, variance
+    running_mean = np.cumsum(g_values) / np.arange(1, num_samples + 1)
+    return theta_estimate, variance, running_mean
 
 if __name__ == "__main__":
     num_samples = 10000
@@ -51,22 +55,15 @@ if __name__ == "__main__":
     print(f"Importance Sampling (task 2) estimate: {theta_importance_task2[0]}, Variance: {theta_importance_task2[1]}")
     print(f"Importance Sampling (task 3) estimate: {theta_importance_task3[0]}, Variance: {theta_importance_task3[1]}")
 
-    # Plotting the convergence of estimates
-    sample_sizes = np.arange(10, num_samples + 1, 10)
-    classical_estimates = []
-    importance_estimates_task2 = []
-    importance_estimates_task3 = []
-    for size in sample_sizes:
-        classical_estimates.append(classical_monte_carlo(num_samples=size)[0])
-        importance_estimates_task2.append(importance_sampling(num_samples=size, task=2)[0])
-        importance_estimates_task3.append(importance_sampling(num_samples=size, task=3)[0])
-    plt.plot(sample_sizes, classical_estimates, label='Classical MC', color='blue')
-    plt.plot(sample_sizes, importance_estimates_task2, label='Importance Sampling Task 2', color='orange')
-    plt.plot(sample_sizes, importance_estimates_task3, label='Importance Sampling Task 3', color='green')
-    plt.axhline(y=1.462651745907181, color='red', linestyle='--', label='True Value')
-    plt.xlabel('Number of Samples')     
-    plt.ylabel('Estimate of θ')
-    plt.title('Convergence of Monte Carlo Estimates')
+    # Plotting of the running means
+    plt.figure(figsize=(12, 6))
+    plt.plot(theta_classical[2], label='Classical MC', alpha=0.7)
+    plt.plot(theta_importance_task2[2], label='Importance Sampling Task 2', alpha=0.7)
+    plt.plot(theta_importance_task3[2], label='Importance Sampling Task 3', alpha=0.7)
+    plt.axhline(y=1.46265, color='r', linestyle='--', label='True Value')
+    plt.xlabel('Number of Samples')
+    plt.ylabel('Running Mean Estimate of θ')
+    plt.title('Running Mean Estimates of θ using Different Methods')
     plt.legend()
     plt.grid()
     plt.show()
