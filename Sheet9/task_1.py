@@ -3,20 +3,23 @@ import scipy.special
 import time
 from itertools import product
 
+
 def h(u):
     """Indicator for unit ball after transformation"""
-    x = 2*u - 1
+    x = 2 * u - 1
     return np.sum(x**2) <= 1
+
 
 def monte_carlo_volume(d, m, seed=0):
     np.random.seed(seed)
     n = m**d
     start = time.time()
-    U = np.random.rand(n, d)
-    values = np.sum((2*U - 1)**2, axis=1) <= 1
-    estimate = (2**d) * np.mean(values)
+    U = np.random.rand(n, d) # n samples in d dimensions
+    values = np.sum((2 * U - 1) ** 2, axis=1) <= 1  # 1 for inside the ball, 0 otherwise
+    estimate = (2**d) * np.mean(values)  # 1s inside the ball divided by total samples is mean times volume of cube. bc volume ball / volume cube = points inside / total points = mean
     runtime = time.time() - start
     return estimate, runtime
+
 
 def anithetic_variates_volume(d, m, seed=0):
     np.random.seed(seed)
@@ -24,25 +27,28 @@ def anithetic_variates_volume(d, m, seed=0):
     start = time.time()
     U = np.random.rand(n, d)
     U_anti = 1 - U
-    values = np.sum((2*U - 1)**2, axis=1) <= 1
-    values_anti = np.sum((2*U_anti - 1)**2, axis=1) <= 1
+    values = np.sum((2 * U - 1) ** 2, axis=1) <= 1
+    values_anti = np.sum((2 * U_anti - 1) ** 2, axis=1) <= 1
     estimate = (2**d) * np.mean((values + values_anti) / 2)
     runtime = time.time() - start
     return estimate, runtime
 
+
 def riemann_volume(d, m):
     start = time.time()
-    grid_1d = (np.arange(m) + 0.5) / m
+    grid_1d = (np.arange(m) + 0.5) / m  # m midpoints in [0,1]
     count = 0
-    for u in product(grid_1d, repeat=d):
-        count += h(np.array(u))
+    for u in product(grid_1d, repeat=d):  # product generates all d-dimensional grid points
+        count += h(np.array(u))  # h(u) is 1 if inside ball, 0 otherwise
     estimate = (2**d) * count / (m**d)
     runtime = time.time() - start
     return estimate, runtime
 
+
 def exact_volume(d):
     # Unit ball volume formula
-    return (np.pi**(d/2)) / scipy.special.gamma(d/2 + 1)
+    return (np.pi ** (d / 2)) / scipy.special.gamma(d / 2 + 1)
+
 
 m = 400
 for d in [2, 3]:
